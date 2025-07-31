@@ -87,6 +87,14 @@ export const COLOR_PALETTE_GENERATOR: any = {
     RECOMMENDATIONS_TITLE: '💡 Recommendations'
   },
 
+  // WCAG Utility Messages
+  WCAG_RECOMMENDATIONS: {
+    LOW_CONTRAST: 'The contrast is very low. Consider using more contrasting colors.',
+    LARGE_TEXT_ONLY: 'The contrast meets requirements for large text, but not for normal text.',
+    DARKEN_FOREGROUND: 'Try darkening the foreground color or lightening the background.',
+    LIGHTEN_FOREGROUND: 'Try lightening the foreground color or darkening the background.'
+  },
+
   // Placeholders and example texts
   PLACEHOLDERS: {
     HEX_BLACK: '#000000',

@@ -1,4 +1,5 @@
 import type { WCAGResult, AccessibilityCheck, ColorInput } from '@/types/wcag';
+import { COLOR_PALETTE_GENERATOR } from '@/constants';
 
 /**
  * Convierte un color hexadecimal a RGB
@@ -75,9 +76,9 @@ export function checkWCAGCompliance(foreground: string, background: string): WCA
   
   if (!isAccessible) {
     if (contrastRatio < 3) {
-      recommendations.push('El contraste es muy bajo. Considera usar colores más contrastantes.');
+      recommendations.push(COLOR_PALETTE_GENERATOR.WCAG_RECOMMENDATIONS.LOW_CONTRAST);
     } else if (contrastRatio < 4.5) {
-      recommendations.push('El contraste cumple para texto grande, pero no para texto normal.');
+      recommendations.push(COLOR_PALETTE_GENERATOR.WCAG_RECOMMENDATIONS.LARGE_TEXT_ONLY);
     }
     
     const rgb1 = hexToRgb(foreground);
@@ -88,9 +89,9 @@ export function checkWCAGCompliance(foreground: string, background: string): WCA
       const lum2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
       
       if (lum1 > lum2) {
-        recommendations.push('Intenta oscurecer el color de primer plano o aclarar el fondo.');
+        recommendations.push(COLOR_PALETTE_GENERATOR.WCAG_RECOMMENDATIONS.DARKEN_FOREGROUND);
       } else {
-        recommendations.push('Intenta aclarar el color de primer plano o oscurecer el fondo.');
+        recommendations.push(COLOR_PALETTE_GENERATOR.WCAG_RECOMMENDATIONS.LIGHTEN_FOREGROUND);
       }
     }
   }
