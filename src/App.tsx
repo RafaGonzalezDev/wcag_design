@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ColorPaletteGenerator } from '@/components/features/color-palette';
 import { Toaster } from '@/components/ui/sonner';
+import { APP } from '@/constants';
 import './App.css';
 
 function App() {
@@ -13,8 +14,8 @@ function App() {
         <div className="container mx-auto px-4 py-4">
           <div>
             <div className="flex justify-between items-end">
-              <h1 className="heading-2">WCAG Design System</h1>
-              <p className="body-small text-muted-foreground">Herramientas para diseño accesible y tipografía consistente</p>
+              <h1 className="heading-2">{APP.HEADER.TITLE}</h1>
+              <p className="body-small text-muted-foreground">{APP.HEADER.SUBTITLE}</p>
             </div>
           </div>
         </div>
@@ -24,8 +25,8 @@ function App() {
       <main className="container mx-auto px-4 py-8 flex-1">
         <div>
           <div className="flex flex-col justify-center items-center mb-6">
-            <h2 className="heading-3 mb-2">Generador de Paletas WCAG</h2>
-            <p className="body-normal text-muted-foreground">Crea y verifica paletas de colores que cumplan con los estándares de accesibilidad WCAG 2.2.</p>
+            <h2 className="heading-3 mb-2">{APP.MAIN.TITLE}</h2>
+            <p className="body-normal text-muted-foreground">{APP.MAIN.DESCRIPTION}</p>
           </div>
           <ColorPaletteGenerator onPaletteChange={setSelectedPalette} />
         </div>
@@ -35,7 +36,7 @@ function App() {
       <footer className="border-t bg-card mt-auto">
         <div className="container mx-auto px-4 py-6">
           <div className="text-center">
-            <p className="body-small text-muted-foreground">Sistema de diseño accesible con tipografía homogénea y paletas WCAG-compliant</p>
+            <p className="body-small text-muted-foreground">{APP.FOOTER.DESCRIPTION}</p>
           </div>
         </div>
       </footer>

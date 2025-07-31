@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { checkWCAGCompliance } from '@/lib/wcag-utils';
 import type { ColorInput } from '@/types/wcag';
+import { PALETTE_GRID } from '@/constants';
 
 interface PaletteGridProps {
   palettes: ColorInput[];
@@ -23,8 +24,8 @@ export function PaletteGrid({
   if (palettes.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        <p>No se encontraron paletas accesibles con el color base seleccionado.</p>
-        <p className="text-sm mt-2">Intenta con un color diferente o ajusta manualmente los colores.</p>
+        <p>{PALETTE_GRID.EMPTY_STATE.NO_PALETTES}</p>
+        <p className="text-sm mt-2">{PALETTE_GRID.EMPTY_STATE.TRY_DIFFERENT}</p>
       </div>
     );
   }
@@ -74,7 +75,7 @@ export function PaletteGrid({
                 {isCurrent && (
                   <div className="absolute top-2 left-2">
                     <span className="text-xs px-2 py-1 rounded-full bg-primary text-primary-foreground font-medium">
-                      Actual
+                      {PALETTE_GRID.CURRENT}
                     </span>
                   </div>
                 )}
@@ -83,7 +84,7 @@ export function PaletteGrid({
               {/* Información de la paleta */}
               <div className="p-3 bg-white">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-medium text-gray-600">Contraste</span>
+                  <span className="text-xs font-medium text-gray-600">{PALETTE_GRID.LABELS.CONTRAST}</span>
                   <span className="text-xs font-mono text-gray-800">
                     {wcagResult.contrastRatio}:1
                   </span>
@@ -91,7 +92,7 @@ export function PaletteGrid({
                 
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div>
-                    <div className="text-gray-500 mb-1">Texto</div>
+                    <div className="text-gray-500 mb-1">{PALETTE_GRID.LABELS.TEXT}</div>
                     <div 
                       className="w-full h-4 rounded border flex items-center justify-center text-[10px] font-mono text-white"
                       style={{ backgroundColor: palette.foreground }}
@@ -100,7 +101,7 @@ export function PaletteGrid({
                     </div>
                   </div>
                   <div>
-                    <div className="text-gray-500 mb-1">Fondo</div>
+                    <div className="text-gray-500 mb-1">{PALETTE_GRID.LABELS.BACKGROUND}</div>
                     <div 
                       className="w-full h-4 rounded border flex items-center justify-center text-[10px] font-mono"
                       style={{ 

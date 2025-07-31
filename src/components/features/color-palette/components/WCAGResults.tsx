@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { WCAGResult } from '@/types/wcag';
+import { WCAG_RESULTS } from '@/constants';
 
 interface WCAGResultsProps {
   result: WCAGResult;
@@ -35,20 +36,20 @@ export function WCAGResults({ result }: WCAGResultsProps) {
   const getStatusText = (level: string) => {
     switch (level) {
       case 'AAA':
-        return 'Excelente - Cumple AAA';
+        return WCAG_RESULTS.STATUS.EXCELLENT_AAA;
       case 'AA':
-        return 'Bueno - Cumple AA';
+        return WCAG_RESULTS.STATUS.GOOD_AA;
       case 'FAIL':
-        return 'No Accesible';
+        return WCAG_RESULTS.STATUS.NOT_ACCESSIBLE;
       default:
-        return 'Desconocido';
+        return WCAG_RESULTS.STATUS.UNKNOWN;
     }
   };
 
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Resultados WCAG</CardTitle>
+        <CardTitle>{WCAG_RESULTS.TITLE}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 flex-1 flex flex-col">
         <div className="flex-1 space-y-4">
@@ -60,13 +61,13 @@ export function WCAGResults({ result }: WCAGResultsProps) {
                 {getStatusText(result.level)}
               </span>
               <span className="text-sm font-mono">
-                Ratio: {result.contrastRatio}:1
+                {WCAG_RESULTS.MESSAGES.RATIO_LABEL} {result.contrastRatio}:1
               </span>
             </div>
             
             {result.level === 'FAIL' && (
               <p className="text-sm mt-2">
-                Esta combinación no cumple con los estándares mínimos de accesibilidad WCAG.
+                {WCAG_RESULTS.MESSAGES.FAIL_DESCRIPTION}
               </p>
             )}
           </div>
@@ -74,7 +75,7 @@ export function WCAGResults({ result }: WCAGResultsProps) {
           {/* Detalles de Cumplimiento */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Texto Normal</h4>
+              <h4 className="font-medium text-sm">{WCAG_RESULTS.SECTIONS.NORMAL_TEXT}</h4>
               <div className="space-y-1 text-xs">
                 <div className={`flex justify-between ${result.contrastRatio >= 4.5 ? 'text-green-600' : 'text-red-600'}`}>
                   <span>AA (4.5:1)</span>
@@ -88,7 +89,7 @@ export function WCAGResults({ result }: WCAGResultsProps) {
             </div>
             
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Texto Grande</h4>
+              <h4 className="font-medium text-sm">{WCAG_RESULTS.SECTIONS.LARGE_TEXT}</h4>
               <div className="space-y-1 text-xs">
                 <div className={`flex justify-between ${result.contrastRatio >= 3 ? 'text-green-600' : 'text-red-600'}`}>
                   <span>AA (3:1)</span>
@@ -105,7 +106,7 @@ export function WCAGResults({ result }: WCAGResultsProps) {
           {/* Recomendaciones */}
           {result.recommendations && result.recommendations.length > 0 && (
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
-              <h4 className="font-medium text-sm text-amber-800 mb-2">💡 Recomendaciones</h4>
+              <h4 className="font-medium text-sm text-amber-800 mb-2">{WCAG_RESULTS.SECTIONS.RECOMMENDATIONS}</h4>
               <ul className="text-sm text-amber-700 space-y-1">
                 {result.recommendations.map((recommendation, index) => (
                   <li key={index} className="flex items-start gap-2">
@@ -121,8 +122,7 @@ export function WCAGResults({ result }: WCAGResultsProps) {
         {/* Información Adicional */}
         <div className="text-xs text-muted-foreground border-t pt-3 mt-auto">
           <p>
-            <strong>Nota:</strong> Los estándares WCAG 2.2 requieren un contraste mínimo de 4.5:1 para texto normal 
-            y 3:1 para texto grande (nivel AA). Para el nivel AAA, se requiere 7:1 y 4.5:1 respectivamente.
+            <strong>{WCAG_RESULTS.MESSAGES.NOTE_TITLE}</strong> {WCAG_RESULTS.MESSAGES.WCAG_INFO}
           </p>
         </div>
       </CardContent>

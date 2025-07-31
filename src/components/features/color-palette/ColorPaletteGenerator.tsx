@@ -11,61 +11,20 @@ import { Palette, Lightbulb, Shuffle, Star, Copy, TestTube } from 'lucide-react'
 import { checkWCAGCompliance, isValidHexColor } from '@/lib/wcag-utils';
 import type { WCAGResult } from '@/types/wcag';
 import { toast } from 'sonner';
+import { COLOR_PALETTE_GENERATOR, PALETTE_CATEGORIES, PREDEFINED_PALETTES } from '@/constants';
 
-// Paletas minimalistas y modernas conformes con WCAG 2.1 AA
-const PREDEFINED_PALETTES = {
-  'Neutrales Cálidos': [
-    { name: 'Wood for Winter', foreground: '#DCCCBD', background: '#021825' },
-    { name: 'La Renard', foreground: '#CCBCAD', background: '#383931' },
-    { name: 'Library Leather', foreground: '#F7E7CE', background: '#59372B' },
-    { name: 'Put It in Neutral', foreground: '#EDE3D9', background: '#1C2915' },
-    { name: 'Champagne Crystal', foreground: '#D6CFBF', background: '#4E4D49' },
-    { name: 'Taupe Minimal', foreground: '#C8BFB8', background: '#4E311D' },
-  ],
-  'Pasteles Modernos': [
-    { name: 'Lavender Meadow', foreground: '#EBE6F5', background: '#463769' },
-    { name: 'Coastal Breeze', foreground: '#F8F9FA', background: '#0A2E4E' },
-    { name: 'Twilight Garden', foreground: '#FFF4E0', background: '#3D3232' },
-    { name: 'Tropical Morning', foreground: '#F9F9F1', background: '#354E67' },
-    { name: 'Blossoms', foreground: '#F7F7EE', background: '#2F4027' },
-    { name: 'Serenity', foreground: '#F5F1E1', background: '#7D6754' },
-  ],
-  'Tonos Tierra Suaves': [
-    { name: 'Bohemian Sun', foreground: '#FFF8F0', background: '#685555' },
-    { name: 'Nautilus Fossil', foreground: '#CBC7BB', background: '#42201F' },
-    { name: 'Vintage Vault', foreground: '#CECDC9', background: '#180B02' },
-    { name: 'Gray + Gold Gears', foreground: '#F6EEE3', background: '#3F3832' },
-    { name: 'Oatmeal Sweater', foreground: '#F1E3BC', background: '#574748' },
-    { name: 'Slug Bug', foreground: '#D3DCDB', background: '#2B3029' },
-  ],
-  'Azules y Grises Minimalistas': [
-    { name: 'Forest Mist', foreground: '#EEF3F9', background: '#001B2E' },
-    { name: 'La Luna', foreground: '#E9E8EE', background: '#101B39' },
-    { name: 'Muted Grays & Blues', foreground: '#000000', background: '#B3CDD7' },
-    { name: 'Blue Gray Scheme', foreground: '#FFFFFF', background: '#003B6D' },
-    { name: 'UVA Cool Contrast', foreground: '#F1F1EF', background: '#232D4B' },
-    { name: 'Muted Grey Blue', foreground: '#000000', background: '#BFDFE7' },
-  ],
-  'Blanco/Negro con Acento': [
-    { name: 'Urban Chic', foreground: '#000000', background: '#FFFFFF' },
-    { name: 'Frosted Noir', foreground: '#FFFFFF', background: '#000000' },
-    { name: 'Classic Contrast', foreground: '#000000', background: '#C0C0C0' },
-    { name: 'Vintage Film', foreground: '#000000', background: '#D9D9D9' },
-    { name: 'Minimal Brass Accent', foreground: '#1C1C1C', background: '#FEFDFB' },
-    { name: 'Powerful B&W', foreground: '#FFFFFF', background: '#000000' },
-  ],
-};
+
 
 interface ColorPaletteGeneratorProps {
   onPaletteChange?: (palette: { foreground: string; background: string }) => void;
 }
 
 export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGeneratorProps) {
-  const [foregroundColor, setForegroundColor] = useState('#000000');
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const [foregroundColor, setForegroundColor] = useState(COLOR_PALETTE_GENERATOR.PLACEHOLDERS.HEX_BLACK);
+  const [backgroundColor, setBackgroundColor] = useState(COLOR_PALETTE_GENERATOR.PLACEHOLDERS.HEX_WHITE);
   const [wcagResult, setWcagResult] = useState<WCAGResult | null>(null);
 
-  const [selectedPredefinedCategory, setSelectedPredefinedCategory] = useState('Neutrales Cálidos');
+  const [selectedPredefinedCategory, setSelectedPredefinedCategory] = useState(PALETTE_CATEGORIES.WARM_NEUTRALS);
 
   // Verificar accesibilidad cuando cambien los colores
   useEffect(() => {
@@ -109,8 +68,8 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
     setForegroundColor(palette.foreground);
     setBackgroundColor(palette.background);
     // Mostrar toast de notificación
-     toast.success('Tema aplicado correctamente', {
-       description: '¡Dirígete a la pestaña de pruebas!',
+     toast.success(COLOR_PALETTE_GENERATOR.MESSAGES.THEME_APPLIED, {
+       description: COLOR_PALETTE_GENERATOR.MESSAGES.GO_TO_TESTS,
      });
   };
 
@@ -144,15 +103,15 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
       <div className="mb-8">
         <Alert className="mb-6">
           <Lightbulb className="h-4 w-4" />
-          <AlertDescription>Explora paletas de colores accesibles basadas en sistemas de diseño reconocidos.</AlertDescription>
+          <AlertDescription>{COLOR_PALETTE_GENERATOR.DESCRIPTIONS.CONTEXTUAL_INFO}</AlertDescription>
         </Alert>
       </div>
 
       <Tabs defaultValue="create" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="create">Crear Paleta</TabsTrigger>
-          <TabsTrigger value="predefined">Paletas Recomendadas</TabsTrigger>
-          <TabsTrigger value="testing">Pruebas</TabsTrigger>
+          <TabsTrigger value="create">{COLOR_PALETTE_GENERATOR.TABS.CREATE}</TabsTrigger>
+          <TabsTrigger value="predefined">{COLOR_PALETTE_GENERATOR.TABS.PREDEFINED}</TabsTrigger>
+          <TabsTrigger value="testing">{COLOR_PALETTE_GENERATOR.TABS.TESTING}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="create" className="space-y-6">
@@ -162,9 +121,9 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Palette className="h-5 w-5" />
-                  Analizador de Contraste WCAG
+                  {COLOR_PALETTE_GENERATOR.TITLES.MAIN_TITLE}
                 </CardTitle>
-                <CardDescription>Diseña combinaciones personalizadas con validación WCAG en tiempo real</CardDescription>
+                <CardDescription>{COLOR_PALETTE_GENERATOR.DESCRIPTIONS.MAIN_DESCRIPTION}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Paleta Seleccionada */}
@@ -185,7 +144,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                 {wcagResult && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Ratio de Contraste</span>
+                      <span className="text-sm font-medium">{COLOR_PALETTE_GENERATOR.LABELS.CONTRAST_RATIO}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-bold">{wcagResult.contrastRatio}:1</span>
                         <Badge variant={wcagResult.level === 'AAA' ? 'default' : wcagResult.level === 'AA' ? 'secondary' : 'destructive'} className="text-xs">
@@ -197,7 +156,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     {/* Barra de progreso de cumplimiento */}
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Cumplimiento de Accesibilidad</span>
+                        <span>{COLOR_PALETTE_GENERATOR.LABELS.ACCESSIBILITY_COMPLIANCE}</span>
                         <span className="font-medium">{getComplianceProgress()}%</span>
                       </div>
                       <Progress value={getComplianceProgress()} className="h-2" />
@@ -206,26 +165,26 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     {/* Niveles de cumplimiento */}
                     <div className="grid grid-cols-3 gap-3 text-center">
                       <div className={`p-3 rounded-lg border ${wcagResult.contrastRatio >= 3 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-                        <div className="text-xs font-medium">AA Grande</div>
+                        <div className="text-xs font-medium">{COLOR_PALETTE_GENERATOR.WCAG_LEVELS.AA_LARGE}</div>
                         <div className="text-xs text-muted-foreground">≥ 3:1</div>
-                        <div className="text-sm">{wcagResult.contrastRatio >= 3 ? '✓ Cumple' : '✗ No cumple'}</div>
+                        <div className="text-sm">{wcagResult.contrastRatio >= 3 ? COLOR_PALETTE_GENERATOR.WCAG_LEVELS.COMPLIES : COLOR_PALETTE_GENERATOR.WCAG_LEVELS.NOT_COMPLIES}</div>
                       </div>
                       <div className={`p-3 rounded-lg border ${wcagResult.contrastRatio >= 4.5 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-                        <div className="text-xs font-medium">AA Normal</div>
+                        <div className="text-xs font-medium">{COLOR_PALETTE_GENERATOR.WCAG_LEVELS.AA_NORMAL}</div>
                         <div className="text-xs text-muted-foreground">≥ 4.5:1</div>
-                        <div className="text-sm">{wcagResult.contrastRatio >= 4.5 ? '✓ Cumple' : '✗ No cumple'}</div>
+                        <div className="text-sm">{wcagResult.contrastRatio >= 4.5 ? COLOR_PALETTE_GENERATOR.WCAG_LEVELS.COMPLIES : COLOR_PALETTE_GENERATOR.WCAG_LEVELS.NOT_COMPLIES}</div>
                       </div>
                       <div className={`p-3 rounded-lg border ${wcagResult.contrastRatio >= 7 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-                        <div className="text-xs font-medium">AAA</div>
+                        <div className="text-xs font-medium">{COLOR_PALETTE_GENERATOR.WCAG_LEVELS.AAA}</div>
                         <div className="text-xs text-muted-foreground">≥ 7:1</div>
-                        <div className="text-sm">{wcagResult.contrastRatio >= 7 ? '✓ Cumple' : '✗ No cumple'}</div>
+                        <div className="text-sm">{wcagResult.contrastRatio >= 7 ? COLOR_PALETTE_GENERATOR.WCAG_LEVELS.COMPLIES : COLOR_PALETTE_GENERATOR.WCAG_LEVELS.NOT_COMPLIES}</div>
                       </div>
                     </div>
 
                     {/* Recomendaciones */}
                     {wcagResult.recommendations && wcagResult.recommendations.length > 0 && (
                       <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
-                        <h4 className="font-medium text-sm text-amber-800 mb-2">💡 Recomendaciones</h4>
+                        <h4 className="font-medium text-sm text-amber-800 mb-2">{COLOR_PALETTE_GENERATOR.MESSAGES.RECOMMENDATIONS_TITLE}</h4>
                         <ul className="text-sm text-amber-700 space-y-1">
                           {wcagResult.recommendations.map((recommendation, index) => (
                             <li key={index} className="flex items-start gap-2">
@@ -243,7 +202,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="foreground" className="flex items-center gap-2">
-                      Color de Texto
+                      {COLOR_PALETTE_GENERATOR.LABELS.FOREGROUND_COLOR}
                       <Badge variant="outline" className="text-xs">
                         {foregroundColor}
                       </Badge>
@@ -256,7 +215,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         onChange={(e) => handleColorPickerChange('foreground', e.target.value)}
                         className="w-16 h-10 p-1 cursor-pointer"
                       />
-                      <Input type="text" value={foregroundColor} onChange={handleForegroundChange} placeholder="#000000" className="flex-1" />
+                      <Input type="text" value={foregroundColor} onChange={handleForegroundChange} placeholder={COLOR_PALETTE_GENERATOR.PLACEHOLDERS.HEX_BLACK} className="flex-1" />
                       <Button size="sm" variant="outline" onClick={() => copyToClipboard(foregroundColor)}>
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -265,7 +224,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
 
                   <div className="space-y-2">
                     <Label htmlFor="background" className="flex items-center gap-2">
-                      Color de Fondo
+                      {COLOR_PALETTE_GENERATOR.LABELS.BACKGROUND_COLOR}
                       <Badge variant="outline" className="text-xs">
                         {backgroundColor}
                       </Badge>
@@ -278,7 +237,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         onChange={(e) => handleColorPickerChange('background', e.target.value)}
                         className="w-16 h-10 p-1 cursor-pointer"
                       />
-                      <Input type="text" value={backgroundColor} onChange={handleBackgroundChange} placeholder="#ffffff" className="flex-1" />
+                      <Input type="text" value={backgroundColor} onChange={handleBackgroundChange} placeholder={COLOR_PALETTE_GENERATOR.PLACEHOLDERS.HEX_WHITE} className="flex-1" />
                       <Button size="sm" variant="outline" onClick={() => copyToClipboard(backgroundColor)}>
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -289,11 +248,11 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                 {/* Acciones */}
                 <div className="grid grid-cols-2 gap-2">
                   <Button onClick={swapColors} variant="outline" className="w-full">
-                    Intercambiar
+                    {COLOR_PALETTE_GENERATOR.BUTTONS.SWAP_COLORS}
                   </Button>
                   <Button onClick={generateRandomAccessiblePalette} disabled={!isValidHexColor(foregroundColor)} className="w-full">
                     <Shuffle className="h-4 w-4 mr-2" />
-                    Paleta Aleatoria
+                    {COLOR_PALETTE_GENERATOR.BUTTONS.RANDOM_PALETTE}
                   </Button>
                 </div>
               </CardContent>
@@ -306,10 +265,10 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Star className="h-5 w-5" />
-                Paletas Recomendadas por Expertos
+                {COLOR_PALETTE_GENERATOR.TITLES.PREDEFINED_PALETTES}
               </CardTitle>
               <CardDescription>
-                Paletas oficiales de sistemas gubernamentales y corporativos verificadas para cumplir WCAG 2.1 AA. Cada combinación incluye roles de uso recomendados para facilitar la integración.
+                {COLOR_PALETTE_GENERATOR.DESCRIPTIONS.PREDEFINED_DESCRIPTION}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -323,7 +282,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {PREDEFINED_PALETTES[selectedPredefinedCategory as keyof typeof PREDEFINED_PALETTES]?.map((palette, index) => {
+                  {PREDEFINED_PALETTES[selectedPredefinedCategory as keyof typeof PREDEFINED_PALETTES]?.map((palette: any, index: any) => {
                     const result = checkWCAGCompliance(palette.foreground, palette.background);
                     return (
                       <div key={index} className="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-shadow" onClick={() => selectPredefinedPalette(palette)}>
@@ -349,7 +308,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                             }}
                           >
                             <Copy className="h-3 w-3 mr-1" />
-                            Copiar y Aplicar
+                            {COLOR_PALETTE_GENERATOR.BUTTONS.COPY_AND_APPLY}
                           </Button>
                         </div>
                       </div>
@@ -366,9 +325,9 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TestTube className="h-5 w-5" />
-                Simulación de Interfaz
+                {COLOR_PALETTE_GENERATOR.TITLES.INTERFACE_SIMULATION}
               </CardTitle>
-              <CardDescription>Evalúa la paleta actual en contextos reales de interfaz de usuario</CardDescription>
+              <CardDescription>{COLOR_PALETTE_GENERATOR.DESCRIPTIONS.INTERFACE_DESCRIPTION}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -381,7 +340,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                   }}
                 >
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold">Panel de Accesibilidad</h2>
+                    <h2 className="text-2xl font-bold">{COLOR_PALETTE_GENERATOR.TITLES.ACCESSIBILITY_PANEL_TITLE}</h2>
                     <Badge
                       style={{
                         backgroundColor: foregroundColor,
@@ -394,19 +353,19 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="p-4 rounded border" style={{ borderColor: foregroundColor + '30' }}>
-                      <h3 className="font-semibold mb-2">Tests Realizados</h3>
-                      <div className="text-3xl font-bold mb-1">247</div>
-                      <p className="text-sm opacity-75">Evaluaciones completadas</p>
+                      <h3 className="font-semibold mb-2">{COLOR_PALETTE_GENERATOR.STATS.TESTS_COMPLETED}</h3>
+                      <div className="text-3xl font-bold mb-1">{COLOR_PALETTE_GENERATOR.STATS.EVALUATIONS_COUNT}</div>
+                      <p className="text-sm opacity-75">{COLOR_PALETTE_GENERATOR.STATS.EVALUATIONS_DESCRIPTION}</p>
                     </div>
                     <div className="p-4 rounded border" style={{ borderColor: foregroundColor + '30' }}>
-                      <h3 className="font-semibold mb-2">Cumplimiento</h3>
+                      <h3 className="font-semibold mb-2">{COLOR_PALETTE_GENERATOR.STATS.COMPLIANCE}</h3>
                       <div className="text-3xl font-bold mb-1">{getComplianceProgress()}%</div>
-                      <p className="text-sm opacity-75">Nivel de accesibilidad</p>
+                      <p className="text-sm opacity-75">{COLOR_PALETTE_GENERATOR.STATS.ACCESSIBILITY_LEVEL}</p>
                     </div>
                     <div className="p-4 rounded border" style={{ borderColor: foregroundColor + '30' }}>
-                      <h3 className="font-semibold mb-2">Contraste</h3>
+                      <h3 className="font-semibold mb-2">{COLOR_PALETTE_GENERATOR.STATS.CONTRAST}</h3>
                       <div className="text-3xl font-bold mb-1">{wcagResult?.contrastRatio.toFixed(1) || '0.0'}</div>
-                      <p className="text-sm opacity-75">Ratio actual</p>
+                      <p className="text-sm opacity-75">{COLOR_PALETTE_GENERATOR.STATS.CURRENT_RATIO}</p>
                     </div>
                   </div>
 
@@ -417,7 +376,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         color: backgroundColor,
                       }}
                     >
-                      Ejecutar Análisis
+                      {COLOR_PALETTE_GENERATOR.BUTTONS.RUN_ANALYSIS}
                     </Button>
                     <Button
                       variant="outline"
@@ -428,7 +387,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         backgroundColor: 'transparent'
                       }}
                     >
-                      Exportar Reporte
+                      {COLOR_PALETTE_GENERATOR.BUTTONS.EXPORT_REPORT}
                     </Button>
                     <Button
                       variant="outline"
@@ -439,7 +398,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         backgroundColor: 'transparent'
                       }}
                     >
-                      Ver Historial
+                      {COLOR_PALETTE_GENERATOR.BUTTONS.VIEW_HISTORY}
                     </Button>
                   </div>
                 </div>
@@ -453,10 +412,10 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     borderColor: foregroundColor + '30'
                   }}
                 >
-                  <h3 className="text-xl font-bold mb-4">Formulario de Contacto</h3>
+                  <h3 className="text-xl font-bold mb-4">{COLOR_PALETTE_GENERATOR.TITLES.CONTACT_FORM}</h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Nombre completo</label>
+                      <label className="block text-sm font-medium mb-2">{COLOR_PALETTE_GENERATOR.FORM_FIELDS.FULL_NAME}</label>
                       <input 
                         type="text" 
                         className="w-full p-3 rounded border" 
@@ -465,11 +424,11 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                           color: foregroundColor,
                           borderColor: foregroundColor + '50'
                         }}
-                        placeholder="Ingresa tu nombre"
+                        placeholder={COLOR_PALETTE_GENERATOR.PLACEHOLDERS.NAME_PLACEHOLDER}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Correo electrónico</label>
+                      <label className="block text-sm font-medium mb-2">{COLOR_PALETTE_GENERATOR.FORM_FIELDS.EMAIL}</label>
                       <input 
                         type="email" 
                         className="w-full p-3 rounded border" 
@@ -478,11 +437,11 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                           color: foregroundColor,
                           borderColor: foregroundColor + '50'
                         }}
-                        placeholder="correo@ejemplo.com"
+                        placeholder={COLOR_PALETTE_GENERATOR.PLACEHOLDERS.EMAIL_PLACEHOLDER}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Mensaje</label>
+                      <label className="block text-sm font-medium mb-2">{COLOR_PALETTE_GENERATOR.FORM_FIELDS.MESSAGE}</label>
                       <textarea 
                         className="w-full p-3 rounded border h-24" 
                         style={{
@@ -490,7 +449,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                           color: foregroundColor,
                           borderColor: foregroundColor + '50'
                         }}
-                        placeholder="Escribe tu mensaje aquí..."
+                        placeholder={COLOR_PALETTE_GENERATOR.PLACEHOLDERS.MESSAGE_PLACEHOLDER}
                       />
                     </div>
                     <Button 
@@ -499,7 +458,7 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                         color: backgroundColor
                       }}
                     >
-                      Enviar Mensaje
+                      {COLOR_PALETTE_GENERATOR.BUTTONS.SEND_MESSAGE}
                     </Button>
                   </div>
                 </div>
@@ -513,15 +472,15 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     borderColor: foregroundColor + '30'
                   }}
                 >
-                  <h3 className="text-xl font-bold mb-4">Navegación Principal</h3>
+                  <h3 className="text-xl font-bold mb-4">{COLOR_PALETTE_GENERATOR.NAVIGATION.MAIN_NAVIGATION}</h3>
                   <nav className="flex flex-wrap gap-4 mb-4">
-                    <a href="#" className="px-4 py-2 rounded hover:opacity-80 transition-opacity" style={{ backgroundColor: foregroundColor, color: backgroundColor }}>Inicio</a>
-                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>Productos</a>
-                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>Servicios</a>
-                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>Contacto</a>
+                    <a href="#" className="px-4 py-2 rounded hover:opacity-80 transition-opacity" style={{ backgroundColor: foregroundColor, color: backgroundColor }}>{COLOR_PALETTE_GENERATOR.NAVIGATION.HOME}</a>
+                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>{COLOR_PALETTE_GENERATOR.NAVIGATION.PRODUCTS}</a>
+                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>{COLOR_PALETTE_GENERATOR.NAVIGATION.SERVICES}</a>
+                    <a href="#" className="px-4 py-2 rounded border hover:opacity-80 transition-opacity" style={{ borderColor: foregroundColor, color: foregroundColor }}>{COLOR_PALETTE_GENERATOR.NAVIGATION.CONTACT}</a>
                   </nav>
                   <div className="text-sm opacity-75">
-                    <p>Menú de navegación con estados activo y normal</p>
+                    <p>{COLOR_PALETTE_GENERATOR.NAVIGATION.DESCRIPTION}</p>
                   </div>
                 </div>
 
@@ -534,16 +493,16 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     borderColor: foregroundColor + '30'
                   }}
                 >
-                  <h3 className="text-xl font-bold mb-4">Tarjetas de Contenido</h3>
+                  <h3 className="text-xl font-bold mb-4">{COLOR_PALETTE_GENERATOR.TITLES.CONTENT_CARDS}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-4 rounded border" style={{ borderColor: foregroundColor + '30' }}>
-                      <h4 className="font-semibold mb-2">Artículo Destacado</h4>
-                      <p className="text-sm opacity-75 mb-3">Este es un ejemplo de cómo se ve el texto en una tarjeta de contenido con la paleta seleccionada.</p>
-                      <a href="#" className="text-sm underline hover:opacity-80">Leer más</a>
+                      <h4 className="font-semibold mb-2">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.FEATURED_ARTICLE}</h4>
+                      <p className="text-sm opacity-75 mb-3">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.CARD_DESCRIPTION}</p>
+                        <a href="#" className="text-sm underline hover:opacity-80">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.READ_MORE}</a>
                     </div>
                     <div className="p-4 rounded border" style={{ borderColor: foregroundColor + '30' }}>
-                      <h4 className="font-semibold mb-2">Notificación</h4>
-                      <p className="text-sm opacity-75 mb-3">Información importante que necesita ser legible y accesible para todos los usuarios.</p>
+                      <h4 className="font-semibold mb-2">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.NOTIFICATION}</h4>
+                        <p className="text-sm opacity-75 mb-3">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.IMPORTANT_INFO}</p>
                       <Button 
                         size="sm"
                         style={{
@@ -566,22 +525,21 @@ export function ColorPaletteGenerator({ onPaletteChange }: ColorPaletteGenerator
                     borderColor: foregroundColor + '30'
                   }}
                 >
-                  <h3 className="text-xl font-bold mb-4">Contenido de Texto</h3>
+                  <h3 className="text-xl font-bold mb-4">{COLOR_PALETTE_GENERATOR.TITLES.TEXT_CONTENT}</h3>
                   <div className="space-y-4">
                     <p className="text-base leading-relaxed">
-                      Este es un ejemplo de párrafo normal que muestra cómo se ve el texto corrido con la paleta de colores seleccionada. 
-                      Es importante que el contraste sea suficiente para garantizar la legibilidad.
+                      {COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.PARAGRAPH_EXAMPLE}
                     </p>
                     <p className="text-sm opacity-75">
-                      Texto secundario con menor opacidad para mostrar jerarquía visual manteniendo la accesibilidad.
+                      {COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.SECONDARY_TEXT}
                     </p>
                     <blockquote className="border-l-4 pl-4" style={{ borderColor: foregroundColor }}>
-                      <p className="italic">"La accesibilidad no es una característica, es un derecho fundamental."</p>
+                      <p className="italic">{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.QUOTE}</p>
                     </blockquote>
                     <ul className="list-disc list-inside space-y-1">
-                      <li>Elemento de lista que debe ser legible</li>
-                      <li>Otro elemento con el contraste adecuado</li>
-                      <li>Tercer elemento para completar el ejemplo</li>
+                      <li>{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.LIST_ITEMS[0]}</li>
+                      <li>{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.LIST_ITEMS[1]}</li>
+                      <li>{COLOR_PALETTE_GENERATOR.SAMPLE_CONTENT.LIST_ITEMS[2]}</li>
                     </ul>
                   </div>
                 </div>

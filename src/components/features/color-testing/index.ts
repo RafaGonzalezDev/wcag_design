@@ -1,1 +1,0 @@
-export { ColorTester } from './ColorTester';
